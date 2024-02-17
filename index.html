@@ -8,7 +8,11 @@
 
     <link href="static/css/zzsc.css" rel="stylesheet" type="text/css" />
     <link href="static/css/pop-ups.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://unpkg.com/mdui@2.0.3/mdui.css">
+    <link rel="stylesheet" href="https://unpkg.com/mdui@2.0.3/mdui.css" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <style>
       .container {
         margin: 0 auto;
@@ -25,16 +29,36 @@
   </head>
 
   <body>
-    <img src="static/picture/game-bg-zh.png" alt="background" class="bg" id="img-zh" />
-    <img src="static/picture/game-bg-en.png" alt="background" class="bg" id="img-en" style="display: none;" />
+    <img
+      src="static/picture/game-bg-zh.png"
+      alt="background"
+      class="bg"
+      class="zh"
+      id="zh"
+    />
+    <img
+      src="static/picture/game-bg-en.png"
+      alt="background"
+      class="bg"
+      class="en"
+      id="en"
+      style="display: none"
+    />
 
-    <div class="content" style="margin-top: 58%">
-      <img src="static/picture/8.png" id="fen-img" style="display: none" />
-      <img src="static/picture/6.png" id="zuliao-img" style="display: none" />
-      <img src="static/picture/3.png" id="baowen-img" style="display: none" />
-      <img src="static/picture/5.png" id="yundou-img" style="display: none" />
-      <img src="static/picture/7.png" id="ganlan-img" style="display: none" />
-      <img src="static/picture/4.png" id="yusan-img" style="display: none" />
+      <mdui-icon onclick="switchLanguage()"
+        name="translate"
+        slot="icon"
+        style="
+          position: fixed;
+          font-size: 30px;
+          margin-top: 15px;
+          margin-right: 15px;
+          left: 85%;
+          color: rgb(235, 248, 253);
+        "
+      ></mdui-icon>
+
+    <div class="content" style="margin-top: 60%">
       <div class="banner">
         <!--抽奖转盘-->
         <div
@@ -54,95 +78,172 @@
         </div>
 
         <!--抽奖次数&幸运值-->
-        <mdui-list style="margin-top: 10% ;background-color: #fde3cd; border-radius: 20px; padding: 15px;">
+        <mdui-list
+          style="
+            margin-top: 10%;
+            background-color: #fde3cd;
+            border-radius: 20px;
+            padding: 15px;
+          "
+        >
           <mdui-list-item>
-            <p style="font-weight: bold;">抽奖机会</p>
-            <p slot="end-icon" id="chanceNum" style="font-weight: bold; font-size: large;"></p>
+            <p class="zh" style="font-weight: bold">抽奖机会</p>
+            <p class="en" style="font-weight: bold">Chance</p>
+            <p
+              slot="end-icon"
+              id="chanceNum"
+              style="font-weight: bold; font-size: large"
+            ></p>
           </mdui-list-item>
           <mdui-list-item>
-            <p style="font-weight: bold;">幸运值</p>
-            <p slot="end-icon" id="luckyNum" style="font-weight: bold; font-size: large;"></p>
+            <p style="font-weight: bold">幸运值</p>
+            <p
+              slot="end-icon"
+              id="luckyNum"
+              style="font-weight: bold; font-size: large"
+            ></p>
           </mdui-list-item>
         </mdui-list>
 
         <!--查看详细抽奖规则&中奖查询-->
-        <div style="justify-content: center;">
-          <mdui-button style="margin-top: 5%; left: 10%" onclick="switchRuleDetail()">抽奖规则</mdui-button>
-          <mdui-button style="margin-top: 5%; left: 17%;">中奖查询</mdui-button>
+        <div style="justify-content: center">
+          <mdui-button
+            style="margin-top: 5%; left: 10%"
+            onclick="switchRuleDetail()"
+            >抽奖规则</mdui-button
+          >
+          <mdui-button style="margin-top: 5%; left: 17%">中奖查询</mdui-button>
         </div>
 
         <!--获得抽奖机会-->
-        <mdui-list style="margin-top: 2% ;background-color: #fae7d6; border-radius: 20px; padding: 15px;">
-          <mdui-list-subheader style="font-size: larger; font-weight: bold;">获得抽奖机会</mdui-list-subheader>
+        <mdui-list
+          style="
+            margin-top: 2%;
+            background-color: #fae7d6;
+            border-radius: 20px;
+            padding: 15px;
+          "
+        >
+          <mdui-list-subheader style="font-size: larger; font-weight: bold"
+            >获得抽奖机会</mdui-list-subheader
+          >
           <mdui-list-item>
-            <p style="font-weight: lighter; font-size: small;">1、安装软件</p>
-            <mdui-button slot="end-icon" style="height: 30px; background-color: #FF8765;" onclick="getChance(0)">
+            <p style="font-weight: lighter; font-size: small">1、安装软件</p>
+            <mdui-button
+              slot="end-icon"
+              style="height: 30px; background-color: #ff8765"
+              onclick="addChance(0)"
+            >
               <p id="rule0Num">0/1</p>
             </mdui-button>
           </mdui-list-item>
           <mdui-list-item>
-            <p style="font-weight: lighter; font-size: small;">2、邀请4位同学注册</p>
-            <mdui-button slot="end-icon" style="height: 30px; background-color: #FF8765;" onclick="getChance(1)">
+            <p style="font-weight: lighter; font-size: small">
+              2、邀请4位同学注册
+            </p>
+            <mdui-button
+              slot="end-icon"
+              style="height: 30px; background-color: #ff8765"
+              onclick="addChance(1)"
+            >
               <p id="rule1Num">0/3</p>
             </mdui-button>
           </mdui-list-item>
           <mdui-list-item>
-            <p style="font-weight: lighter; font-size: small;">3、参与食堂评价</p>
-            <mdui-button slot="end-icon" style="height: 30px; background-color: #FF8765;" onclick="getChance(2)">
+            <p style="font-weight: lighter; font-size: small">
+              3、参与食堂评价
+            </p>
+            <mdui-button
+              slot="end-icon"
+              style="height: 30px; background-color: #ff8765"
+              onclick="addChance(2)"
+            >
               <p id="rule2Num">0/1</p>
             </mdui-button>
           </mdui-list-item>
         </mdui-list>
 
         <!--中奖记录展示-->
-        <mdui-list style="margin-top: 5% ;background-color: #fae7d6; border-radius: 20px; padding: 15px;">
-          <mdui-list-subheader style="font-size: larger; font-weight: bold;">中奖记录</mdui-list-subheader>
+        <mdui-list
+          style="
+            margin-top: 5%;
+            background-color: #fae7d6;
+            border-radius: 20px;
+            padding: 15px;
+          "
+        >
+          <mdui-list-subheader style="font-size: larger; font-weight: bold"
+            >中奖记录</mdui-list-subheader
+          >
           <mdui-list-item> </mdui-list-item>
         </mdui-list>
       </div>
-
-
     </div>
-
-
-
 
     <!-- 抽奖规则弹窗 -->
     <div id="myRuleDetail" class="ruleDetail">
       <h2>抽奖规则：</h2>
       <p>1、安装软件获得1次抽奖机会</p>
-      <p>2、每邀请4位同学安装并注册软件，获得1次抽奖机会（最多可获得3次抽奖机会）</p>
+      <p>
+        2、每邀请4位同学安装并注册软件，获得1次抽奖机会（最多可获得3次抽奖机会）
+      </p>
       <p>3、参与食堂打分可获得1次抽奖机会（最多可获得1次抽奖机会）</p>
-      <h2 style="margin-top: 10px;">兑奖规则：</h2>
-      <p style="margin-bottom: 5px;">消耗抽奖次数进行抽奖后，若中奖，则会产生中奖记录并保存。</p>
+      <h2 style="margin-top: 10px">兑奖规则：</h2>
+      <p style="margin-bottom: 5px">
+        消耗抽奖次数进行抽奖后，若中奖，则会产生中奖记录并保存。
+      </p>
       <p>用户前往活动摊位凭中奖记录兑换相应奖品。</p>
-      <mdui-button onclick="switchRuleDetail()" style="margin-top: 10px; left: 70%; height: 35px;">确定</mdui-button>
+      <mdui-button
+        onclick="switchRuleDetail()"
+        style="margin-top: 10px; left: 70%; height: 35px"
+        >确定</mdui-button
+      >
     </div>
 
     <!-- 语言选择弹窗 -->
     <div id="myModal" class="modal">
-      <p style="margin-bottom: 15px; font-weight: bold;">Please select language:</p>
-      <mdui-button class="btn" onclick="selectLanguage('en')" style="width: 40%; margin: 0 10px;">English</mdui-button>
-      <mdui-button class="btn" onclick="selectLanguage('zh')" style="width: 40%;">鬃纹</mdui-button>
+      <p style="margin-bottom: 15px; font-weight: bold">
+        Please select language:
+      </p>
+      <mdui-button
+        class="btn"
+        onclick="selectLanguage('en')"
+        style="width: 40%; margin: 0 10px"
+        >English</mdui-button
+      >
+      <mdui-button class="btn" onclick="selectLanguage('zh')" style="width: 40%"
+        >鬃纹</mdui-button
+      >
     </div>
-
-
 
     <script src="static/js/jquery.min.js"></script>
     <script type="text/javascript" src="static/js/awardRotate.js"></script>
     <script src="https://unpkg.com/mdui@2.0.3/mdui.global.js"></script>
     <script type="text/javascript">
 
-      // 选择语言
+      // 获取token和language
+      const url = new URL(window.location.href);
+      const token = url.searchParams.get("token");
+      const lang = url.searchParams.get("lang");
+
+      // 自动选择语言
+      $(document).ready(function () {
+        if (lang.includes("en")) {
+          document.getElementsByClassName("zh").style.display = "none";
+          document.getElementsByClassName("en").style.display = "block";
+        } else if (lang.includes("zh")) {
+          document.getElementsByClassName("zh").style.display = "block";
+          document.getElementsByClassName("en").style.display = "none";
+        }
+      });
+
       function selectLanguage(choseLang) {
-        lang = choseLang;
-        // 更换背景
-        if (lang == "en") {
-          document.getElementById("img-zh").style.display = "none";
-          document.getElementById("img-en").style.display = "block";
+        if (choseLang == "en") {
+          document.getElementsByClassName("zh").style.display = "none";
+          document.getElementsByClassName("en").style.display = "block";
         } else {
-          document.getElementById("img-zh").style.display = "block";
-          // document.getElementById("img-en").style.display = "none";
+          document.getElementsByClassName("zh").style.display = "block";
+          document.getElementsByClassName("en").style.display = "none";
         }
         console.log(choseLang);
         document.getElementById("myModal").style.display = "none";
@@ -150,11 +251,15 @@
 
       // 显示/关闭抽奖规则弹窗
       function switchRuleDetail() {
-        if(document.getElementById("myRuleDetail").style.display == "block"){
+        if (document.getElementById("myRuleDetail").style.display == "block") {
           document.getElementById("myRuleDetail").style.display = "none";
         } else {
           document.getElementById("myRuleDetail").style.display = "block";
         }
+      }
+      // 显示语言选择弹窗
+      function switchLanguage() {
+        document.getElementById("myModal").style.display = "block";
       }
 
       var turnplate = {
@@ -167,8 +272,6 @@
         bRotate: false, //false:停止;ture:旋转
       };
 
-      var lang = "zh"; // 语言
-      
       var chanceNum = 3; //抽奖次数
       var luckyNum = 15; //幸运值=已抽奖次数*15
 
@@ -179,16 +282,19 @@
       chanceNumElement.textContent = chanceNum;
       luckyNumElement.textContent = luckyNum;
 
-      function getChance(ruleNo) { // 点击按钮获得抽奖机会
+      function addChance(ruleNo) {
+        // 点击按钮获得抽奖机会
         // TODO:
       }
 
-      function getLotteryResult() { // 点击按钮查询(刷新)中奖记录
+      function getLotteryResult() {
+        // 点击按钮查询(刷新)中奖记录
         // TODO:
       }
 
       $(document).ready(function () {
-        document.getElementById("myModal").style.display = "block";
+        // 打开页面时加载当前奖池
+
         //动态添加大转盘的奖品与奖品区域背景颜色
         turnplate.restaraunts = [
           "20积分",
