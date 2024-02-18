@@ -40,7 +40,7 @@
       class="en bg"
     />
 
-      <mdui-icon onclick="switchLanguage()"
+      <mdui-icon onclick="switchLanguagePopUp()"
         name="language"
         style="
           position: fixed;
@@ -70,11 +70,11 @@
           ></canvas>
           <img class="pointer" src="static/picture/turnplate-pointer.png" />
         </div>
-
+        <mdui-icon name='info' style="font-size: 26px; color: rgb(104, 15, 219);" onclick="switchProbabilityTable()"> </mdui-icon>
         <!--抽奖次数&幸运值-->
         <mdui-list
           style="
-            margin-top: 10%;
+            margin-top: 2%;
             background-color: #fde3cd;
             border-radius: 20px;
             padding: 15px;
@@ -100,7 +100,7 @@
           </mdui-list-item>
         </mdui-list>
 
-        <!--查看详细抽奖规则&中奖查询-->
+        <!--查看详细抽奖规则&中奖概率&中奖查询-->
         <div style="justify-content: center">
           <mdui-button
             style="margin-top: 5%; left: 10%; width: 100px;"
@@ -135,9 +135,9 @@
             <mdui-button
               slot="end-icon"
               style="height: 30px; background-color: #ff8765"
-              onclick="addChance(0)"
+              onclick="addChancebyRule0()"
             >
-              <p id="rule0Num">0/1</p>
+              <p id="rule0Num"></p>
             </mdui-button>
           </mdui-list-item>
           <mdui-list-item>
@@ -150,9 +150,9 @@
             <mdui-button
               slot="end-icon"
               style="height: 30px; background-color: #ff8765"
-              onclick="addChance(1)"
+              onclick="addChanceRule1()"
             >
-              <p id="rule1Num">0/3</p>
+              <p id="rule1Num"></p>
             </mdui-button>
           </mdui-list-item>
           <mdui-list-item>
@@ -165,9 +165,9 @@
             <mdui-button
               slot="end-icon"
               style="height: 30px; background-color: #ff8765"
-              onclick="addChance(2)"
+              onclick="addChanceRule2()"
             >
-              <p id="rule2Num">0/1</p>
+              <p id="rule2Num"></p>
             </mdui-button>
           </mdui-list-item>
         </mdui-list>
@@ -229,8 +229,81 @@
       <mdui-button onclick="switchRuleDetail()" style="margin-top: 10px; left: 70%; height: 35px">
         <p class="zh">懂啦 !</p>
         <p class="en">Get it !</p>
-      </mdui-button
-      >
+      </mdui-button>
+    </div>
+
+    <!--奖品概率表格弹窗-->
+    <div id="myProbabilityTable" class="probabilityTable">
+      <table>
+        <tr>
+          <th>Extraction Times</th>
+          <th>First Extraction</th>
+          <th>Second Extraction</th>
+          <th>Third Extraction</th>
+          <th>Fourth Extraction</th>
+          <th>Fifth Extraction</th>
+        </tr>
+        <tr>
+          <td>Under the Big Tree</td>
+          <td>2.00%</td>
+          <td>10.00%</td>
+          <td>20.00%</td>
+          <td>30.00%</td>
+          <td>30.00%</td>
+        </tr>
+        <tr>
+          <td>Penang</td>
+          <td>40.00%</td>
+          <td>30.00%</td>
+          <td>25.00%</td>
+          <td>20.00%</td>
+          <td>20.00%</td>
+        </tr>
+        <tr>
+          <td>Postcard</td>
+          <td>8.00%</td>
+          <td>10.00%</td>
+          <td>10.00%</td>
+          <td>10.00%</td>
+          <td>10.00%</td>
+        </tr>
+        <tr>
+          <td>Red Envelope</td>
+          <td>5.00%</td>
+          <td>5.00%</td>
+          <td>10.00%</td>
+          <td>10.00%</td>
+          <td>10.00%</td>
+        </tr>
+        <tr>
+          <td>Bookmark</td>
+          <td>5.00%</td>
+          <td>10.00%</td>
+          <td>10.00%</td>
+          <td>10.00%</td>
+          <td>10.00%</td>
+        </tr>
+        <tr>
+          <td>Envelope</td>
+          <td>5.00%</td>
+          <td>10.00%</td>
+          <td>10.00%</td>
+          <td>10.00%</td>
+          <td>10.00%</td>
+        </tr>
+        <tr>
+          <td>Total Probability</td>
+          <td>65.00%</td>
+          <td>75.00%</td>
+          <td>85.00%</td>
+          <td>90.00%</td>
+          <td>90.00%</td>
+        </tr>
+      </table>
+      <mdui-button onclick="switchProbabilityTable()" style="margin-top: 10px; left: 70%; height: 35px; position: sticky;">
+        <p class="zh">懂啦 !</p>
+        <p class="en">Get it !</p>
+      </mdui-button>
     </div>
 
     <!-- 语言选择弹窗 -->
@@ -258,15 +331,15 @@
       // 测试用：?token=eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjQsImlkIjo0LCJleHAiOjE3Mzk3MzExOTd9.ZyOuV7D84HcUOovdXJfZTWnxdWl9Lk5SIasBRqqGG5I&lang=en
       // 拦截非法访问，获取token和language
       const url = new URL(window.location.href);
-      if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
-        window.location.href = "https://www.mocd.cc/";
-      }
+      // if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
+      //   window.location.href = "https://www.mocd.cc/";
+      // }
       const token = url.searchParams.get("token");
-      const lang = url.searchParams.get("lang");
+      var lang = url.searchParams.get("lang");
 
       // =====================多语言调节=====================
-      // 自动选择语言
-      $(document).ready(function () {
+      // 语言调整函数
+      function switchLanguage() {
         if (lang.includes("en")) {
           var enElements = document.getElementsByClassName("en");
           var zhElements = document.getElementsByClassName("zh");
@@ -282,25 +355,15 @@
             enElements[i].style.display = "none";
           }
         }
+      }
+      // 自动选择语言
+      $(document).ready(function () {
+        switchLanguage();
       });
       // 语言选择按钮
       function selectLanguage(choseLang) {
-        if (choseLang == "en") {
-          var enElements = document.getElementsByClassName("en");
-          var zhElements = document.getElementsByClassName("zh");
-          for (var i = 0; i < enElements.length; i++) {
-            enElements[i].style.display = "block";
-            zhElements[i].style.display = "none";
-          }
-        } else {
-          var enElements = document.getElementsByClassName("en");
-          var zhElements = document.getElementsByClassName("zh");
-          for (var i = 0; i < enElements.length; i++) {
-            zhElements[i].style.display = "block";
-            enElements[i].style.display = "none";
-          }
-        }
-        console.log(choseLang);
+        lang = choseLang;
+        switchLanguage();
         document.getElementById("myModal").style.display = "none";
       }
 
@@ -314,10 +377,19 @@
         }
       }
       // 语言选择弹窗
-      function switchLanguage() {
+      function switchLanguagePopUp() {
         document.getElementById("myModal").style.display = "block";
       }
+      // 中奖概率表格弹窗
+      function switchProbabilityTable() {
+        if (document.getElementById("myProbabilityTable").style.display == "block") {
+          document.getElementById("myProbabilityTable").style.display = "none";
+        } else {
+          document.getElementById("myProbabilityTable").style.display = "block";
+        }
+      }
 
+      // =====================全局变量=====================
       var turnplate = {
         restaraunts: [], //大转盘奖品名称
         colors: [], //大转盘奖品区块对应背景颜色
@@ -327,84 +399,174 @@
         startAngle: 0, //开始角
         bRotate: false, //false:停止;ture:旋转
       };
+      var chanceNum = 0; //抽奖次数
+      var luckyNum = 0; //幸运值=已抽奖次数*15
+      var prizeList = new Array();
+      var chance = Object;
 
-      var chanceNum = 3; //抽奖次数
-      var luckyNum = 15; //幸运值=已抽奖次数*15
-
-      // 获取要展示变量值的元素
-      var chanceNumElement = document.getElementById("chanceNum");
-      var luckyNumElement = document.getElementById("luckyNum");
-      // 将变量值显示在页面上
-      chanceNumElement.textContent = chanceNum;
-      luckyNumElement.textContent = luckyNum;
-
-      function addChance(ruleNo) {
-        sw
+      // =====================接口调用=====================
+      function addChancebyRule0() {
+        alert("已领取1次机会，到达上限！");
       }
-
+      function addChanceRule1() {
+        $.ajax({
+          url: "https://api.xmum.app/lottery/addChancebyRule1",
+          type: "GET",
+          dataType: "json",
+          headers: {
+            Token: token,
+          },
+          success: function (response) {
+            console.log(response);
+            if (response.code == 0) {
+              alert(response.msg);
+            } else {
+              alert("Successfully added!");
+            }
+          },
+          error: function (response) {
+            alert("Network request failure!");
+          },
+        });
+        getChance();
+      }
+      function addChanceRule2() {
+        $.ajax({
+          url: "https://api.xmum.app/lottery/addChancebyRule2",
+          type: "GET",
+          dataType: "json",
+          headers: {
+            Token: token,
+          },
+          success: function (response) {
+            console.log(response);
+            if (response.code == 0) {
+              alert(response.msg);
+            } else {
+              alert("Successfully added!");
+            }
+          },
+          error: function (response) {
+            alert("Network request failure!");
+          },
+        });
+        getChance();
+      }
       function getChance() {
         $.ajax({
-          url: "https://api.xmum.app/getChance",
+          url: "https://api.xmum.app/lottery/getChance",
           type: "GET",
           dataType: "json",
           headers: {
             Token: token,
             // "Content-Type": "application/json",
           },
-          success: function (data) {
+          success: function (response) {
+            chance = response.data;
+            showChanceInfo();
+            showRuleInfo();
           },
+          error: function (response) {
+            alert("Network request failure!");
+          }
         });
+        function showChanceInfo() {
+          // 获取要展示变量值的元素
+          let chanceNumElement = document.getElementById("chanceNum");
+          let luckyNumElement = document.getElementById("luckyNum");
+          chanceNum = chance.chance;
+          luckyNum = chance.turn * 15;
+          // 将变量值显示在页面上
+          chanceNumElement.textContent = chanceNum;
+          luckyNumElement.textContent = luckyNum;
+        }
+        function showRuleInfo() {
+          let rule0Element = document.getElementById("rule0Num");
+          let rule1Element = document.getElementById("rule1Num");
+          let rule2Element = document.getElementById("rule2Num");
+          let text = "";
+          text = chance.rule0 + "/1";
+          rule0Element.textContent = text;
+          text = chance.rule1 + "/3";
+          rule1Element.textContent = text;
+          text = chance.rule2 + "/1";
+          rule2Element.textContent = text;
+        }
       }
 
       function getLotteryResult() {
+        var resultList = [];
         $.ajax({
-          url: "https://api.xmum.app/getUserPrizeResult",
+          url: "https://api.xmum.app/lottery/getUserPrizeResult",
           type: "GET",
           dataType: "json",
           headers: {
             Token: token,
-            // "Content-Type": "application/json",
           },
-          success: function (data) {
-            console.log(data);
+          success: function (response) {
+            console.log(response);
+            resultList = response.data;
+            showResult();
           },
-          error: function (data) {
-            console.log("err");
+          error: function (response) {
+            alert("Network request failure!");
           },
         });
+        function showResult() {
+          // TODO:
+
+        }
       }
 
       function getPrizeList() {
+        $.ajax({ // TODO: Timeout
+          url: "https://api.xmum.app/lottery/getPrizeList",
+          type: "GET",
+          async: false,
+          dataType: "json",
+          headers: {
+            Token: token,
+          },
+          success: function (response) {
+            response.data.forEach(element => {
+              prizeList.push(element.name);
+            });
+          },
+          error: function (response) {
+            alert("Network request failure!");
+          },
+        });
+      }
+
+      function startDraw() {
         $.ajax({
-          url: "https://api.xmum.app/getPrizeList",
+          url: "https://api.xmum.app/lottery/draw",
           type: "GET",
           dataType: "json",
           headers: {
             Token: token,
             // "Content-Type": "application/json",
           },
-          success: function (data) {
-            console.log(data);
+          success: function (response) {
+            console.log(response);
           },
-          error: function (data) {
-            console.log("err");
+          error: function (response) {
+            alert("Network request failure!");
           },
         });
       }
-
+      // =====================绘制转盘=====================
       $(document).ready(function () {
-        // 打开页面时加载当前奖池
+        // 打开页面时加载当前奖池，并获取用户抽奖机会信息
+        getChance();
         getPrizeList();
 
         //动态添加大转盘的奖品与奖品区域背景颜色
-        turnplate.restaraunts = [
-          "20积分",
-          "足疗机",
-          "20积分",
-          "保温杯",
-          "20积分",
-          "手持式电熨斗",
-        ];
+        if (prizeList.length <= 0) { // 若奖品全被抽完
+          alert("无剩余奖品!");
+          return;
+        }
+        turnplate.restaraunts = prizeList;
         turnplate.colors = [
           "#008080",
           "#209B87",
@@ -413,16 +575,6 @@
           "#B9E576",
           "#F9F871",
         ];
-        var rotateTimeOut = function () {
-          $("#wheelcanvas").rotate({
-            angle: 0,
-            animateTo: 2160,
-            duration: 8000,
-            callback: function () {
-              alert("网络超时，请检查您的网络设置！");
-            },
-          });
-        };
 
         //旋转转盘 item:奖品位置; txt：提示语;
         var rotateFn = function (item, txt) {
@@ -450,6 +602,7 @@
         $(".pointer").click(function () {
           //指针点击事件
           if (turnplate.bRotate) return; //过滤转盘正在旋转中发生的点击事件
+          startDraw();
           turnplate.bRotate = !turnplate.bRotate;
           //获取随机数(奖品个数范围内)
           var item = rnd(1, turnplate.restaraunts.length);
@@ -531,7 +684,7 @@
             //----绘制奖品开始----
             ctx.fillStyle = "#E5302F";
             var text = turnplate.restaraunts[i];
-            var line_height = 17;
+            var line_height = 20;
             //translate方法重新映射画布上的 (0,0) 位置
             ctx.translate(
               211 + Math.cos(angle + arc / 2) * turnplate.textRadius,
@@ -541,30 +694,10 @@
             //rotate方法旋转当前的绘图
             ctx.rotate(angle + arc / 2 + Math.PI / 2);
 
-            /** 下面代码根据奖品类型、奖品名称长度渲染不同效果，如字体、颜色、图片效果。(具体根据实际情况改变) **/
-            if (text.indexOf("M") > 0) {
-              //流量包
-              var texts = text.split("M");
-              for (var j = 0; j < texts.length; j++) {
-                ctx.font =
-                  j == 0 ? "bold 20px Microsoft YaHei" : "16px Microsoft YaHei";
-                if (j == 0) {
-                  ctx.fillText(
-                    texts[j] + "M",
-                    -ctx.measureText(texts[j] + "M").width / 2,
-                    j * line_height
-                  );
-                } else {
-                  ctx.fillText(
-                    texts[j],
-                    -ctx.measureText(texts[j]).width / 2,
-                    j * line_height
-                  );
-                }
-              }
-            } else if (text.indexOf("M") == -1 && text.length > 6) {
+            /** 绘制奖品名称**/
+            if (text.length > 10) {
               //奖品名称长度超过一定范围
-              text = text.substring(0, 6) + "||" + text.substring(6);
+              text = text.substring(0, 10) + "||" + text.substring(10);
               var texts = text.split("||");
               for (var j = 0; j < texts.length; j++) {
                 ctx.fillText(
@@ -576,6 +709,7 @@
             } else {
               //在画布上绘制填色的文本。文本的默认颜色是黑色
               //measureText()方法返回包含一个对象，该对象包含以像素计的指定字体宽度
+              ctx.font = "bold 20px Microsoft YaHei";
               ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
             }
 
