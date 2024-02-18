@@ -41,8 +41,7 @@
     />
 
       <mdui-icon onclick="switchLanguage()"
-        name="translate"
-        slot="icon"
+        name="language"
         style="
           position: fixed;
           font-size: 30px;
@@ -110,7 +109,7 @@
             <p class="zh">抽奖规则</p>
             <p class="en">Rules</p>
           </mdui-button>
-          <mdui-button style="margin-top: 5%; left: 17%; width: 100px;">
+          <mdui-button onclick="getLotteryResult()" style="margin-top: 5%; left: 17%; width: 100px;">
             <p class="zh">中奖查询</p>
             <p class="en">Result Query</p>
           </mdui-button>
@@ -255,11 +254,17 @@
     <script src="https://unpkg.com/mdui@2.0.3/mdui.global.js"></script>
     <script type="text/javascript">
 
-      // 获取token和language
+      // =====================网页初始化=====================
+      // 测试用：?token=eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjQsImlkIjo0LCJleHAiOjE3Mzk3MzExOTd9.ZyOuV7D84HcUOovdXJfZTWnxdWl9Lk5SIasBRqqGG5I&lang=en
+      // 拦截非法访问，获取token和language
       const url = new URL(window.location.href);
+      if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
+        window.location.href = "https://www.mocd.cc/";
+      }
       const token = url.searchParams.get("token");
       const lang = url.searchParams.get("lang");
 
+      // =====================多语言调节=====================
       // 自动选择语言
       $(document).ready(function () {
         if (lang.includes("en")) {
@@ -278,7 +283,7 @@
           }
         }
       });
-
+      // 语言选择按钮
       function selectLanguage(choseLang) {
         if (choseLang == "en") {
           var enElements = document.getElementsByClassName("en");
@@ -299,7 +304,8 @@
         document.getElementById("myModal").style.display = "none";
       }
 
-      // 显示/关闭抽奖规则弹窗
+      // =====================弹窗控制=====================
+      // 抽奖规则弹窗
       function switchRuleDetail() {
         if (document.getElementById("myRuleDetail").style.display == "block") {
           document.getElementById("myRuleDetail").style.display = "none";
@@ -307,7 +313,7 @@
           document.getElementById("myRuleDetail").style.display = "block";
         }
       }
-      // 显示语言选择弹窗
+      // 语言选择弹窗
       function switchLanguage() {
         document.getElementById("myModal").style.display = "block";
       }
@@ -333,17 +339,62 @@
       luckyNumElement.textContent = luckyNum;
 
       function addChance(ruleNo) {
-        // 点击按钮获得抽奖机会
-        // TODO:
+        sw
+      }
+
+      function getChance() {
+        $.ajax({
+          url: "https://api.xmum.app/getChance",
+          type: "GET",
+          dataType: "json",
+          headers: {
+            Token: token,
+            // "Content-Type": "application/json",
+          },
+          success: function (data) {
+          },
+        });
       }
 
       function getLotteryResult() {
-        // 点击按钮查询(刷新)中奖记录
-        // TODO:
+        $.ajax({
+          url: "https://api.xmum.app/getUserPrizeResult",
+          type: "GET",
+          dataType: "json",
+          headers: {
+            Token: token,
+            // "Content-Type": "application/json",
+          },
+          success: function (data) {
+            console.log(data);
+          },
+          error: function (data) {
+            console.log("err");
+          },
+        });
+      }
+
+      function getPrizeList() {
+        $.ajax({
+          url: "https://api.xmum.app/getPrizeList",
+          type: "GET",
+          dataType: "json",
+          headers: {
+            Token: token,
+            // "Content-Type": "application/json",
+          },
+          success: function (data) {
+            console.log(data);
+          },
+          error: function (data) {
+            console.log("err");
+          },
+        });
       }
 
       $(document).ready(function () {
         // 打开页面时加载当前奖池
+        getPrizeList();
 
         //动态添加大转盘的奖品与奖品区域背景颜色
         turnplate.restaraunts = [
