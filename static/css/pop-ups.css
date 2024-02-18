@@ -44,3 +44,19 @@
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.QRCode {
+  display: none;
+  overflow-x: auto;
+  justify-content: center;
+  position: fixed;
+  width: 80vw;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(240, 216, 170, 0.938);
+  padding: 20px;
+  border: 3px solid rgba(240, 216, 170, 0.938);
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

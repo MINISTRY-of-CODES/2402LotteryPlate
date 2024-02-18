@@ -173,7 +173,7 @@
         </mdui-list>
 
         <!--中奖记录展示-->
-        <mdui-list id="resultList"
+        <mdui-list 
           style="
             margin-top: 5%;
             background-color: #fae7d6;
@@ -185,6 +185,7 @@
             <p class="zh">中奖记录</p>
             <p class="en">Result</p>
           </mdui-list-subheader>
+          <div id="resultList"></div>
         </mdui-list>
       </div>
     </div>
@@ -321,18 +322,30 @@
       >
     </div>
 
+    <!--兑奖二维码弹窗-->
+    <div id="myQRCode" class="QRCode">
+      <div id="codeArea">
+        <div id="qrcode" style="justify-content: center; display: grid;"></div>
+      </div>
+      <mdui-button onclick="closeQrcode()" style="margin-top: 10px; height: 35px">
+        <p class="zh">好啦 !</p>
+        <p class="en">Finish !</p>
+      </mdui-button>
+    </div>
+
     <script src="static/js/jquery.min.js"></script>
     <script type="text/javascript" src="static/js/awardRotate.js"></script>
     <script src="https://unpkg.com/mdui@2.0.3/mdui.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
     <script type="text/javascript">
 
       // =====================网页初始化=====================
       // 测试用：?token=eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjQsImlkIjo0LCJleHAiOjE3Mzk3MzExOTd9.ZyOuV7D84HcUOovdXJfZTWnxdWl9Lk5SIasBRqqGG5I&lang=en
       // 拦截非法访问，获取token和language
       const url = new URL(window.location.href);
-      // if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
-      //   window.location.href = "https://www.mocd.cc/";
-      // }
+      if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
+        window.location.href = "https://www.mocd.cc/";
+      }
       const token = url.searchParams.get("token");
       var lang = url.searchParams.get("lang");
 
@@ -386,6 +399,21 @@
         } else {
           document.getElementById("myProbabilityTable").style.display = "block";
         }
+      }
+      // 兑奖二维码弹窗
+      function displayQrcode(uuid) {
+        var qrCodePopup = document.getElementById("myQRCode");
+        if (qrCodePopup.style.display !== "grid") { // 二维码弹窗已打开时，阻止打开新二维码弹窗
+          $('#qrcode').qrcode(uuid);
+          qrCodePopup.style.display = "grid";
+        }
+      }
+      function closeQrcode() {
+        document.getElementById("codeArea").innerHTML = ""; // 移除当前二维码元素
+        let qrcode = document.createElement("div"); // 重新构建二维码容器
+        qrcode.id = "qrcode";
+        document.getElementById("codeArea").appendChild(qrcode);
+        document.getElementById("myQRCode").style.display = "none";
       }
 
       // =====================全局变量=====================
@@ -513,17 +541,18 @@
           },
         });
         function showResult() { // 动态渲染列表
-          var date = new Date(resultList[0].time);
-          date = date.setHours(date.getHours() + 8);
-          console.log(date.toLocaleDateString);
-          
+          // var date = new Date(resultList[0].time);
+          // date = date.setHours(date.getHours() + 8);
+          // console.log(date.toLocaleDateString);
+
           var resultElement = document.getElementById("resultList");
           resultElement.innerHTML = ""; // 清空列表
           var fragment = document.createDocumentFragment(); // 创建一个文档片段
+          // 遍历数组, 动态渲染列表
           resultList.forEach(element => {
             let resultPrizeName = document.createElement("mdui-list-item");
-            resultPrizeName.onclick = function () { // 二维码
-              alert(element.prizeName);
+            resultPrizeName.onclick = function () { //点击显示兑奖二维码
+              displayQrcode(element.uuid);
             };
             resultPrizeName.textContent = element.prizeName;
             let resultTime = document.createElement("span");
