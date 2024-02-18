@@ -173,7 +173,7 @@
         </mdui-list>
 
         <!--中奖记录展示-->
-        <mdui-list
+        <mdui-list id="resultList"
           style="
             margin-top: 5%;
             background-color: #fae7d6;
@@ -185,7 +185,6 @@
             <p class="zh">中奖记录</p>
             <p class="en">Result</p>
           </mdui-list-subheader>
-          <mdui-list-item> </mdui-list-item>
         </mdui-list>
       </div>
     </div>
@@ -402,6 +401,8 @@
       var chanceNum = 0; //抽奖次数
       var luckyNum = 0; //幸运值=已抽奖次数*15
       var prizeList = new Array();
+      var winPrizeIndex = -1;
+      var resultList = [];
       var chance = Object;
 
       // =====================接口调用=====================
@@ -495,7 +496,6 @@
       }
 
       function getLotteryResult() {
-        var resultList = [];
         $.ajax({
           url: "https://api.xmum.app/lottery/getUserPrizeResult",
           type: "GET",
@@ -512,9 +512,31 @@
             alert("Network request failure!");
           },
         });
-        function showResult() {
-          // TODO:
+        function showResult() { // 动态渲染列表
+          var date = new Date(resultList[0].time);
+          date = date.setHours(date.getHours() + 8);
+          console.log(date.toLocaleDateString);
+          
+          var resultElement = document.getElementById("resultList");
+          resultElement.innerHTML = ""; // 清空列表
+          var fragment = document.createDocumentFragment(); // 创建一个文档片段
+          resultList.forEach(element => {
+            let resultPrizeName = document.createElement("mdui-list-item");
+            resultPrizeName.onclick = function () { // 二维码
+              alert(element.prizeName);
+            };
+            resultPrizeName.textContent = element.prizeName;
+            let resultTime = document.createElement("span");
+            resultTime.slot = "description";
+            resultTime.textContent = element.time.slice(0, 10) + " " + element.time.slice(11, 19);
+            resultPrizeName.appendChild(resultTime);
 
+            fragment.appendChild(resultPrizeName); // 将列表项添加到文档片段中
+
+            let divider = document.createElement("mdui-divider");
+            fragment.appendChild(divider);
+          });
+          resultElement.appendChild(fragment); // 将文档片段一次性添加到页面中
         }
       }
 
@@ -528,9 +550,11 @@
             Token: token,
           },
           success: function (response) {
+            prizeList.push("No Prize");
             response.data.forEach(element => {
               prizeList.push(element.name);
             });
+            console.log(prizeList);
           },
           error: function (response) {
             alert("Network request failure!");
@@ -543,18 +567,22 @@
           url: "https://api.xmum.app/lottery/draw",
           type: "GET",
           dataType: "json",
+          async: false,
           headers: {
             Token: token,
-            // "Content-Type": "application/json",
           },
           success: function (response) {
             console.log(response);
+            winPrizeIndex = prizeList.indexOf(response.data.prizeName);
           },
           error: function (response) {
             alert("Network request failure!");
           },
         });
+        getChance();
+        getLotteryResult();
       }
+
       // =====================绘制转盘=====================
       $(document).ready(function () {
         // 打开页面时加载当前奖池，并获取用户抽奖机会信息
@@ -568,6 +596,7 @@
         }
         turnplate.restaraunts = prizeList;
         turnplate.colors = [
+          "#B9E576",
           "#008080",
           "#209B87",
           "#4DB686",
@@ -589,8 +618,8 @@
           $("#wheelcanvas").stopRotate();
           $("#wheelcanvas").rotate({
             angle: 0,
-            animateTo: angles + 14400, //旋转角度
-            duration: 8020, //旋转动画时间
+            animateTo:  angles + 3600, //旋转角度
+            duration: 6000, //旋转动画时间
             callback: function () {
               //中奖提示
               alert("获得奖品：" + txt);
@@ -603,46 +632,13 @@
           //指针点击事件
           if (turnplate.bRotate) return; //过滤转盘正在旋转中发生的点击事件
           startDraw();
+          //winPrizeIndex = 5;
+          console.log(winPrizeIndex);
           turnplate.bRotate = !turnplate.bRotate;
-          //获取随机数(奖品个数范围内)
-          var item = rnd(1, turnplate.restaraunts.length);
-          //奖品数量等于10,指针落在对应奖品区域的中心角度[252, 216, 180, 144, 108, 72, 36, 360, 324, 288]
-          rotateFn(item, turnplate.restaraunts[item - 1]);
-          console.log(item);
+
+          rotateFn(winPrizeIndex + 1, prizeList[winPrizeIndex]);
         });
       });
-
-      function rnd(n, m) {
-        n = 1; //最小随机数
-        m = 100; //最大随机数（概率范围最大值）
-        //最大数数不超过最大随机数
-        var ransluck = [50, 60, 65, 70, 75, 80, 85, 90, 95, 100]; //概率为比自己小的第一个数之间的差
-        var randoms = Math.floor(Math.random() * (m - n + 1) + n);
-        if (randoms <= ransluck[0]) {
-          var random = 1;
-        } else if (randoms <= ransluck[1]) {
-          var random = 2;
-        } else if (randoms <= ransluck[2]) {
-          var random = 3;
-        } else if (randoms <= ransluck[3]) {
-          var random = 4;
-        } else if (randoms <= ransluck[4]) {
-          var random = 5;
-        } else if (randoms <= ransluck[5]) {
-          var random = 6;
-        } else if (randoms <= ransluck[6]) {
-          var random = 7;
-        } else if (randoms <= ransluck[7]) {
-          var random = 8;
-        } else if (randoms <= ransluck[8]) {
-          var random = 9;
-        } else if (randoms <= ransluck[9]) {
-          var random = 10;
-        }
-        //alert(randoms);
-        //alert(random);
-        return random;
-      }
 
       //页面所有元素加载完毕后执行drawRouletteWheel()方法对转盘进行渲染
       window.onload = function () {
