@@ -324,6 +324,7 @@
 
     <!--兑奖二维码弹窗-->
     <div id="myQRCode" class="QRCode">
+      <p id="codeName" style="font-weight: bold; font-size: 16px; margin-bottom: 10px;"></p>
       <div id="codeArea">
         <div id="qrcode" style="justify-content: center; display: grid;"></div>
       </div>
@@ -343,9 +344,9 @@
       // 测试用：?token=eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjQsImlkIjo0LCJleHAiOjE3Mzk3MzExOTd9.ZyOuV7D84HcUOovdXJfZTWnxdWl9Lk5SIasBRqqGG5I&lang=en
       // 拦截非法访问，获取token和language
       const url = new URL(window.location.href);
-      if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
-        window.location.href = "https://www.mocd.cc/";
-      }
+      // if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
+      //   window.location.href = "https://www.mocd.cc/";
+      // }
       const token = url.searchParams.get("token");
       var lang = url.searchParams.get("lang");
 
@@ -401,12 +402,11 @@
         }
       }
       // 兑奖二维码弹窗
-      function displayQrcode(uuid) {
-        var qrCodePopup = document.getElementById("myQRCode");
-        if (qrCodePopup.style.display !== "grid") { // 二维码弹窗已打开时，阻止打开新二维码弹窗
-          $('#qrcode').qrcode(uuid);
-          qrCodePopup.style.display = "grid";
-        }
+      function displayQrcode(uuid, name, qrCodePopup) {
+        let nameElement = document.getElementById("codeName");
+        nameElement.textContent = name;
+        $('#qrcode').qrcode(uuid);
+        qrCodePopup.style.display = "grid";
       }
       function closeQrcode() {
         document.getElementById("codeArea").innerHTML = ""; // 移除当前二维码元素
@@ -442,6 +442,7 @@
           url: "https://api.xmum.app/lottery/addChancebyRule1",
           type: "GET",
           dataType: "json",
+          timeout: 8000,
           headers: {
             Token: token,
           },
@@ -464,6 +465,7 @@
           url: "https://api.xmum.app/lottery/addChancebyRule2",
           type: "GET",
           dataType: "json",
+          timeout: 8000,
           headers: {
             Token: token,
           },
@@ -486,9 +488,9 @@
           url: "https://api.xmum.app/lottery/getChance",
           type: "GET",
           dataType: "json",
+          timeout: 8000,
           headers: {
             Token: token,
-            // "Content-Type": "application/json",
           },
           success: function (response) {
             chance = response.data;
@@ -528,6 +530,7 @@
           url: "https://api.xmum.app/lottery/getUserPrizeResult",
           type: "GET",
           dataType: "json",
+          timeout: 8000,
           headers: {
             Token: token,
           },
@@ -550,19 +553,34 @@
           var fragment = document.createDocumentFragment(); // 创建一个文档片段
           // 遍历数组, 动态渲染列表
           resultList.forEach(element => {
-            let resultPrizeName = document.createElement("mdui-list-item");
-            resultPrizeName.onclick = function () { //点击显示兑奖二维码
-              displayQrcode(element.uuid);
+            // 创建列表项
+            let listItem = document.createElement("mdui-list-item");
+            listItem.onclick = function () {
+              var qrCodePopup = document.getElementById("myQRCode");
+              if (qrCodePopup.style.display !== "grid") { // 二维码弹窗已打开时，阻止打开新二维码弹窗
+                displayQrcode(element.uuid, element.prizeName, qrCodePopup)
+              };
             };
-            resultPrizeName.textContent = element.prizeName;
+            // 创建列表内容-名称
+            let resultName = document.createElement("span");
+            resultName.style.fontSize = "14px";
+            resultName.style.fontWeight = "normal";
+            resultName.textContent = element.prizeName;
+            // 创建列表内容-时间
             let resultTime = document.createElement("span");
             resultTime.slot = "description";
+            resultTime.style.fontSize = "12px";
+            resultTime.style.fontWeight = "lighter";
             resultTime.textContent = element.time.slice(0, 10) + " " + element.time.slice(11, 19);
-            resultPrizeName.appendChild(resultTime);
+            // 组装列表项
+            listItem.appendChild(resultName);
+            listItem.appendChild(resultTime);
+            // 将列表项添加到文档片段中
+            fragment.appendChild(listItem);
 
-            fragment.appendChild(resultPrizeName); // 将列表项添加到文档片段中
-
+            // 创建分割线
             let divider = document.createElement("mdui-divider");
+            // 将分割线添加到文档片段中
             fragment.appendChild(divider);
           });
           resultElement.appendChild(fragment); // 将文档片段一次性添加到页面中
@@ -570,11 +588,12 @@
       }
 
       function getPrizeList() {
-        $.ajax({ // TODO: Timeout
+        $.ajax({
           url: "https://api.xmum.app/lottery/getPrizeList",
           type: "GET",
           async: false,
           dataType: "json",
+          timeout: 8000,
           headers: {
             Token: token,
           },
@@ -596,6 +615,7 @@
           url: "https://api.xmum.app/lottery/draw",
           type: "GET",
           dataType: "json",
+          timeout: 8000,
           async: false,
           headers: {
             Token: token,
@@ -720,10 +740,8 @@
             ctx.rotate(angle + arc / 2 + Math.PI / 2);
 
             /** 绘制奖品名称**/
-            if (text.length > 10) {
-              //奖品名称长度超过一定范围
-              text = text.substring(0, 10) + "||" + text.substring(10);
-              var texts = text.split("||");
+            if (text.includes(" ")) { //奖品名称中包含空格，则按空格换行绘制
+              var texts = text.split(" ");
               for (var j = 0; j < texts.length; j++) {
                 ctx.fillText(
                   texts[j],
