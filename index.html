@@ -45,7 +45,7 @@
         style="
           position: fixed;
           font-size: 30px;
-          margin-top: 15px;
+          margin-top: 35px;
           margin-right: 15px;
           left: 85%;
           color: rgb(235, 248, 253);
@@ -182,8 +182,14 @@
           "
         >
           <mdui-list-subheader style="font-size: larger; font-weight: bold">
-            <p class="zh">中奖记录</p>
-            <p class="en">Result</p>
+            <p class="zh">
+              <span>中奖记录</span>
+              <span style="font-size: 12px; font-weight: lighter;">点击展示兑奖二维码</span>
+            </p>
+            <p class="en">
+              <span>Result</span>
+              <span style="font-size: 12px; font-weight: lighter;">Click to display the QR code</span>
+            </p>
           </mdui-list-subheader>
           <div id="resultList"></div>
         </mdui-list>
@@ -452,13 +458,13 @@
               alert(response.msg);
             } else {
               alert("Successfully added!");
+                      getChance();
             }
           },
           error: function (response) {
             alert("Network request failure!");
           },
         });
-        getChance();
       }
       function addChanceRule2() {
         $.ajax({
@@ -475,13 +481,13 @@
               alert(response.msg);
             } else {
               alert("Successfully added!");
+              getChance();
             }
           },
           error: function (response) {
             alert("Network request failure!");
           },
         });
-        getChance();
       }
       function getChance() {
         $.ajax({
@@ -543,7 +549,9 @@
             alert("Network request failure!");
           },
         });
-        function showResult() { // 动态渲染列表
+        // 动态渲染列表
+        function showResult() {
+          // TODO: 转化时间为东八区
           // var date = new Date(resultList[0].time);
           // date = date.setHours(date.getHours() + 8);
           // console.log(date.toLocaleDateString);
@@ -598,6 +606,9 @@
             Token: token,
           },
           success: function (response) {
+            if (response.code == 0) {
+              alert(response.msg);
+            }
             prizeList.push("No Prize");
             response.data.forEach(element => {
               prizeList.push(element.name);
@@ -621,6 +632,9 @@
             Token: token,
           },
           success: function (response) {
+            if (response.code == 0) {
+              alert(response.msg);
+            }
             console.log(response);
             winPrizeIndex = prizeList.indexOf(response.data.prizeName);
           },
@@ -628,8 +642,6 @@
             alert("Network request failure!");
           },
         });
-        getChance();
-        getLotteryResult();
       }
 
       // =====================绘制转盘=====================
@@ -646,12 +658,11 @@
         turnplate.restaraunts = prizeList;
         turnplate.colors = [
           "#B9E576",
-          "#008080",
-          "#209B87",
-          "#4DB686",
-          "#80CF7F",
+          "#52B5B5",
           "#B9E576",
-          "#F9F871",
+          "#52B5B5",
+          "#B9E576",
+          "#52B5B5",
         ];
 
         //旋转转盘 item:奖品位置; txt：提示语;
@@ -672,6 +683,9 @@
             callback: function () {
               //中奖提示
               alert("获得奖品：" + txt);
+              // 刷新用户抽奖机会以及中奖结果
+              getChance();
+              getLotteryResult();
               turnplate.bRotate = !turnplate.bRotate;
             },
           });
@@ -684,7 +698,6 @@
           //winPrizeIndex = 5;
           console.log(winPrizeIndex);
           turnplate.bRotate = !turnplate.bRotate;
-
           rotateFn(winPrizeIndex + 1, prizeList[winPrizeIndex]);
         });
       });
