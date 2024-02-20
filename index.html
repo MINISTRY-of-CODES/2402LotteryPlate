@@ -89,6 +89,7 @@
               style="font-weight: bold; font-size: large"
             ></p>
           </mdui-list-item>
+          <mdui-divider></mdui-divider>
           <mdui-list-item>
             <p class="zh" style="font-weight: bold">幸运值</p>
             <p class="en" style="font-weight: bold">Lucky Level</p>
@@ -140,6 +141,7 @@
               <p id="rule0Num"></p>
             </mdui-button>
           </mdui-list-item>
+          <mdui-divider></mdui-divider>
           <mdui-list-item>
             <p class="zh" style="font-weight: lighter; font-size: small">
               2、邀请4位同学注册
@@ -155,6 +157,7 @@
               <p id="rule1Num"></p>
             </mdui-button>
           </mdui-list-item>
+          <mdui-divider></mdui-divider>
           <mdui-list-item>
             <p class="zh" style="font-weight: lighter; font-size: small">
               3、参与食堂评价
@@ -716,7 +719,8 @@
           //在给定矩形内清空一个矩形
           ctx.clearRect(0, 0, 422, 422);
           //strokeStyle 属性设置或返回用于笔触的颜色、渐变或模式
-          ctx.strokeStyle = "#FFBE04";
+          ctx.strokeStyle = "#FFFFFF";
+          ctx.lineWidth = 3;
           //font 属性设置或返回画布上文本内容的当前字体属性
           ctx.font = "16px Microsoft YaHei";
           for (var i = 0; i < turnplate.restaraunts.length; i++) {
