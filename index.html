@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lottery</title>
 
-    <link href="static/css/zzsc.css" rel="stylesheet" type="text/css" />
-    <link href="static/css/pop-ups.css" rel="stylesheet" type="text/css" />
+    <link href="static/css/zzsc.css?version=1.0.0" rel="stylesheet" type="text/css" />
+    <link href="static/css/pop-ups.css?version=1.0.0" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://unpkg.com/mdui@2.0.3/mdui.css" />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -350,7 +350,6 @@
     <script type="text/javascript">
 
       // =====================网页初始化=====================
-      // 测试用：?token=eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjQsImlkIjo0LCJleHAiOjE3Mzk3MzExOTd9.ZyOuV7D84HcUOovdXJfZTWnxdWl9Lk5SIasBRqqGG5I&lang=en
       // 拦截非法访问，获取token和language
       const url = new URL(window.location.href);
       // if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
@@ -412,6 +411,12 @@
       }
       // 兑奖二维码弹窗
       function displayQrcode(uuid, name, qrCodePopup) {
+
+        if (name === "No Prize") {
+          alert(lang.includes('zh') ? "未中奖！" : "No Prize!");
+          return;
+        }
+
         let nameElement = document.getElementById("codeName");
         nameElement.textContent = name;
         $('#qrcode').qrcode(uuid);
@@ -444,7 +449,7 @@
 
       // =====================接口调用=====================
       function addChancebyRule0() {
-        alert("已领取1次机会，到达上限！");
+        alert(lang.includes('en') ? "Already got it!" : "已经领取过了！");
       }
       function addChanceRule1() {
         $.ajax({
@@ -554,16 +559,15 @@
         });
         // 动态渲染列表
         function showResult() {
-          // TODO: 转化时间为东八区
-          // var date = new Date(resultList[0].time);
-          // date = date.setHours(date.getHours() + 8);
-          // console.log(date.toLocaleDateString);
 
           var resultElement = document.getElementById("resultList");
           resultElement.innerHTML = ""; // 清空列表
           var fragment = document.createDocumentFragment(); // 创建一个文档片段
           // 遍历数组, 动态渲染列表
           resultList.forEach(element => {
+            if (element.prizeName === "No Prize") {
+                return;
+            }
             // 创建列表项
             let listItem = document.createElement("mdui-list-item");
             listItem.onclick = function () {
@@ -582,7 +586,9 @@
             resultTime.slot = "description";
             resultTime.style.fontSize = "12px";
             resultTime.style.fontWeight = "lighter";
-            resultTime.textContent = element.time.slice(0, 10) + " " + element.time.slice(11, 19);
+            // 时间 + 8小时
+            element.time = new Date(element.time);
+            resultTime.textContent = new Date(element.time).toLocaleString();
             // 组装列表项
             listItem.appendChild(resultName);
             listItem.appendChild(resultTime);
