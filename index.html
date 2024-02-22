@@ -257,56 +257,56 @@
           <td>2.00%</td>
           <td>10.00%</td>
           <td>20.00%</td>
-          <td>30.00%</td>
-          <td>30.00%</td>
+          <td>20.00%</td>
+          <td>20.00%</td>
         </tr>
         <tr>
           <td>Penang</td>
-          <td>40.00%</td>
-          <td>30.00%</td>
+          <td>8.00%</td>
+          <td>18.00%</td>
           <td>25.00%</td>
           <td>20.00%</td>
           <td>20.00%</td>
         </tr>
         <tr>
           <td>Postcard</td>
+          <td>3.00%</td>
           <td>8.00%</td>
-          <td>10.00%</td>
           <td>10.00%</td>
           <td>10.00%</td>
           <td>10.00%</td>
         </tr>
         <tr>
           <td>Red Envelope</td>
+          <td>1.00%</td>
           <td>5.00%</td>
-          <td>5.00%</td>
-          <td>10.00%</td>
-          <td>10.00%</td>
+          <td>8.00%</td>
+          <td>9.00%</td>
           <td>10.00%</td>
         </tr>
         <tr>
           <td>Bookmark</td>
+          <td>2.00%</td>
           <td>5.00%</td>
-          <td>10.00%</td>
-          <td>10.00%</td>
-          <td>10.00%</td>
+          <td>8.00%</td>
+          <td>9.00%</td>
           <td>10.00%</td>
         </tr>
         <tr>
           <td>Envelope</td>
+          <td>2.00%</td>
           <td>5.00%</td>
-          <td>10.00%</td>
-          <td>10.00%</td>
-          <td>10.00%</td>
+          <td>8.00%</td>
+          <td>9.00%</td>
           <td>10.00%</td>
         </tr>
         <tr>
           <td>Total Probability</td>
-          <td>65.00%</td>
-          <td>75.00%</td>
-          <td>85.00%</td>
-          <td>90.00%</td>
-          <td>90.00%</td>
+          <td>18.00%</td>
+          <td>51.00%</td>
+          <td>79.00%</td>
+          <td>77.00%</td>
+          <td>80.00%</td>
         </tr>
       </table>
       <mdui-button onclick="switchProbabilityTable()" style="margin-top: 10px; left: 65%; height: 35px; position: sticky;">
@@ -357,6 +357,9 @@
       // }
       const token = url.searchParams.get("token");
       var lang = url.searchParams.get("lang");
+
+      const prefix = (window.location.href.includes("://localhost") || window.location.href.includes("/2402"))
+              ? "http://localhost:8080" : "https://api.xmum.app";
 
       // =====================多语言调节=====================
       // 语言调整函数
@@ -453,7 +456,7 @@
       }
       function addChanceRule1() {
         $.ajax({
-          url: "https://api.xmum.app/lottery/addChancebyRule1",
+          url: prefix+"/lottery/addChancebyRule1",
           type: "GET",
           dataType: "json",
           timeout: 8000,
@@ -476,7 +479,7 @@
       }
       function addChanceRule2() {
         $.ajax({
-          url: "https://api.xmum.app/lottery/addChancebyRule2",
+          url: prefix+"/lottery/addChancebyRule2",
           type: "GET",
           dataType: "json",
           timeout: 8000,
@@ -499,7 +502,7 @@
       }
       function getChance() {
         $.ajax({
-          url: "https://api.xmum.app/lottery/getChance",
+          url: prefix+"/lottery/getChance",
           type: "GET",
           dataType: "json",
           timeout: 8000,
@@ -541,7 +544,7 @@
 
       function getLotteryResult() {
         $.ajax({
-          url: "https://api.xmum.app/lottery/getUserPrizeResult",
+          url: prefix+"/lottery/getUserPrizeResult",
           type: "GET",
           dataType: "json",
           timeout: 8000,
@@ -606,7 +609,7 @@
 
       function getPrizeList() {
         $.ajax({
-          url: "https://api.xmum.app/lottery/getPrizeList",
+          url: prefix+"/lottery/getPrizeList",
           type: "GET",
           async: false,
           dataType: "json",
@@ -632,7 +635,7 @@
 
       function startDraw() {
         $.ajax({
-          url: "https://api.xmum.app/lottery/draw",
+          url: prefix+"/lottery/draw",
           type: "GET",
           dataType: "json",
           timeout: 8000,
