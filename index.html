@@ -144,10 +144,26 @@
           <mdui-divider></mdui-divider>
           <mdui-list-item>
             <p class="zh" style="font-weight: lighter; font-size: small">
-              2、邀请4位同学注册
+              2、到达世界最高摊位~
             </p>
             <p class="en" style="font-weight: lighter; font-size: small">
-              2、Invite 4 friends to register
+              2、 Come to the booth
+            </p>
+            <mdui-button
+              slot="end-icon"
+              style="height: 30px; background-color: #ff8765"
+              onclick="showTokenCode()"
+            >
+              <p id="rule3Num"></p>
+            </mdui-button>
+          </mdui-list-item>
+          <mdui-divider></mdui-divider>
+          <mdui-list-item>
+            <p class="zh" style="font-weight: lighter; font-size: small">
+              3、邀请4位同学注册
+            </p>
+            <p class="en" style="font-weight: lighter; font-size: small">
+              4、Invite 4 friends to register
             </p>
             <mdui-button
               slot="end-icon"
@@ -160,10 +176,10 @@
           <mdui-divider></mdui-divider>
           <mdui-list-item>
             <p class="zh" style="font-weight: lighter; font-size: small">
-              3、参与食堂评价
+              4、参与食堂评价
             </p>
             <p class="en" style="font-weight: lighter; font-size: small">
-              3、 Participate in Canteen Vote
+              4、 Participate in Canteen Vote
             </p>
             <mdui-button
               slot="end-icon"
@@ -171,6 +187,22 @@
               onclick="addChanceRule2()"
             >
               <p id="rule2Num"></p>
+            </mdui-button>
+          </mdui-list-item>
+          <mdui-divider></mdui-divider>
+          <mdui-list-item>
+            <p class="zh" style="font-weight: lighter; font-size: small">
+              5、提出建议
+            </p>
+            <p class="en" style="font-weight: lighter; font-size: small">
+              5、Leave advice
+            </p>
+            <mdui-button
+              slot="end-icon"
+              style="height: 30px; background-color: #ff8765"
+              onclick="showTokenCode()"
+            >
+              <p id="rule4Num"></p>
             </mdui-button>
           </mdui-list-item>
         </mdui-list>
@@ -333,7 +365,7 @@
 
     <!--兑奖二维码弹窗-->
     <div id="myQRCode" class="QRCode">
-      <p id="codeName" style="font-weight: bold; font-size: 16px; margin-bottom: 10px;"></p>
+      <p id="codeName" style="font-weight: bold; font-size: 16px; margin-bottom: 10px; text-align: center;"></p>
       <div id="codeArea">
         <div id="qrcode" style="justify-content: center; display: grid;"></div>
       </div>
@@ -343,6 +375,21 @@
       </mdui-button>
     </div>
 
+    <!--获取抽奖机会弹窗（Token二维码弹窗）-->
+    <div id="myTokenQR" class="tokenQR">
+      <p id="tokenCodeBanner" style="font-weight: bold; font-size: 16px; margin-bottom: 10px; text-align: center;"> 
+        <span class="zh">请向摊位工作人员出示二维码</span>
+        <span class="en">Please show the QR code to staff</span>
+      </p>
+      <div id="tokenCodeArea">
+        <div id="tokenCode" style="justify-content: center; display: grid;"></div>
+      </div>
+      <mdui-button onclick="closeTokenCode()" style="margin-top: 10px; height: 35px">
+        <p class="zh">🥳好啦 ! 刷新抽奖机会!</p>
+        <p class="en">🥳Finish !</p>
+      </mdui-button>
+    </div>
+    
     <script src="static/js/jquery.min.js"></script>
     <script type="text/javascript" src="static/js/awardRotate.js"></script>
     <script src="https://unpkg.com/mdui@2.0.3/mdui.global.js"></script>
@@ -414,12 +461,10 @@
       }
       // 兑奖二维码弹窗
       function displayQrcode(uuid, name, qrCodePopup) {
-
         if (name === "No Prize") {
           alert(lang.includes('zh') ? "未中奖！" : "No Prize!");
           return;
         }
-
         let nameElement = document.getElementById("codeName");
         nameElement.textContent = name;
         $('#qrcode').qrcode(uuid);
@@ -433,6 +478,20 @@
         document.getElementById("myQRCode").style.display = "none";
       }
 
+      // Rule3&4获取机会二维码弹窗
+      function showTokenCode() {
+        let tokenCodePopup = document.getElementById("myTokenQR");
+        $('#tokenCode').qrcode(token);
+        tokenCodePopup.style.display = "grid";
+      }
+      function closeTokenCode() {
+        document.getElementById("tokenCodeArea").innerHTML = ""; // 移除当前二维码元素
+        let qrcode = document.createElement("div"); // 重新构建二维码容器
+        qrcode.id = "tokenCode";
+        document.getElementById("tokenCodeArea").appendChild(qrcode);
+        document.getElementById("myTokenQR").style.display = "none";
+        getChance();
+      }
       // =====================全局变量=====================
       var turnplate = {
         restaraunts: [], //大转盘奖品名称
@@ -468,7 +527,7 @@
             if (response.code == 0) {
               alert(response.msg);
             } else {
-              alert("Successfully added!");
+              alert("🎉Successfully added" + response.data + "chance(s)");
                       getChance();
             }
           },
@@ -491,7 +550,7 @@
             if (response.code == 0) {
               alert(response.msg);
             } else {
-              alert("Successfully added!");
+              alert("🎉Successfully added!");
               getChance();
             }
           },
@@ -532,6 +591,8 @@
           let rule0Element = document.getElementById("rule0Num");
           let rule1Element = document.getElementById("rule1Num");
           let rule2Element = document.getElementById("rule2Num");
+          let rule3Element = document.getElementById("rule3Num");
+          let rule4Element = document.getElementById("rule4Num");
           let text = "";
           text = chance.rule0 + "/1";
           rule0Element.textContent = text;
@@ -539,6 +600,10 @@
           rule1Element.textContent = text;
           text = chance.rule2 + "/1";
           rule2Element.textContent = text;
+          text = chance.rule3 + "/1";
+          rule3Element.textContent = text;
+          text = chance.rule4 + "/1";
+          rule4Element.textContent = text;
         }
       }
 
@@ -562,7 +627,6 @@
         });
         // 动态渲染列表
         function showResult() {
-
           var resultElement = document.getElementById("resultList");
           resultElement.innerHTML = ""; // 清空列表
           var fragment = document.createDocumentFragment(); // 创建一个文档片段
@@ -661,6 +725,7 @@
         // 打开页面时加载当前奖池，并获取用户抽奖机会信息
         getChance();
         getPrizeList();
+        getLotteryResult()
 
         //动态添加大转盘的奖品与奖品区域背景颜色
         if (prizeList.length <= 0) { // 若奖品全被抽完
