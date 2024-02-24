@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lottery</title>
+    <meta name="description" content="Xplorer Lucky Draw. Author: Coding Club." />
+    <title>Xplorer Lucky Draw</title>
 
     <link href="static/css/zzsc.css?version=1.0.0" rel="stylesheet" type="text/css" />
     <link href="static/css/pop-ups.css?version=1.0.0" rel="stylesheet" type="text/css" />
@@ -68,7 +69,7 @@
             width="422px"
             height="422px"
           ></canvas>
-          <img class="pointer" src="static/picture/turnplate-pointer.png" />
+          <img class="pointer" alt="pointer" src="static/picture/turnplate-pointer.png" />
         </div>
         <!--抽奖次数&幸运值-->
         <mdui-list
@@ -159,7 +160,23 @@
           <mdui-divider></mdui-divider>
           <mdui-list-item>
             <p class="zh" style="font-weight: lighter; font-size: small">
-              3、邀请4位同学注册
+              3、留下建议
+            </p>
+            <p class="en" style="font-weight: lighter; font-size: small">
+              3、Leave suggestions
+            </p>
+            <mdui-button
+              slot="end-icon"
+              style="height: 30px; background-color: #ff8765"
+              onclick="showTokenCode()"
+            >
+              <p id="rule4Num"></p>
+            </mdui-button>
+          </mdui-list-item>
+          <mdui-divider></mdui-divider>
+          <mdui-list-item>
+            <p class="zh" style="font-weight: lighter; font-size: small">
+              4、邀请4位同学注册
             </p>
             <p class="en" style="font-weight: lighter; font-size: small">
               4、Invite 4 friends to register
@@ -175,10 +192,10 @@
           <mdui-divider></mdui-divider>
           <mdui-list-item>
             <p class="zh" style="font-weight: lighter; font-size: small">
-              4、参与食堂评价
+              5、参与食堂评价
             </p>
             <p class="en" style="font-weight: lighter; font-size: small">
-              4、 Participate in Canteen Vote
+              5、 Participate in Canteen Vote
             </p>
             <mdui-button
               slot="end-icon"
@@ -186,22 +203,6 @@
               onclick="addChanceRule2()"
             >
               <p id="rule2Num"></p>
-            </mdui-button>
-          </mdui-list-item>
-          <mdui-divider></mdui-divider>
-          <mdui-list-item>
-            <p class="zh" style="font-weight: lighter; font-size: small">
-              5、提出建议
-            </p>
-            <p class="en" style="font-weight: lighter; font-size: small">
-              5、Leave advice
-            </p>
-            <mdui-button
-              slot="end-icon"
-              style="height: 30px; background-color: #ff8765"
-              onclick="showTokenCode()"
-            >
-              <p id="rule4Num"></p>
             </mdui-button>
           </mdui-list-item>
         </mdui-list>
@@ -236,9 +237,15 @@
         <h2>抽奖规则：</h2>
         <p>1、安装软件获得1次抽奖机会</p>
         <p>
-          2、每邀请4位同学安装并注册软件，获得1次抽奖机会（最多可获得3次抽奖机会）
+          2、到达活动摊位获得1次抽奖机会（最多可获得1次抽奖机会）
         </p>
-        <p>3、参与食堂打分可获得1次抽奖机会（最多可获得1次抽奖机会）</p>
+        <p>
+          3、在活动摊位留言区域留下建议，获得1次抽奖机会（最多可获得1次抽奖机会）
+        </p>
+        <p>
+          4、每邀请4位同学安装并注册软件，获得1次抽奖机会（最多可获得3次抽奖机会）
+        </p>
+        <p>5、参与食堂打分可获得1次抽奖机会（最多可获得1次抽奖机会）</p>
         <p style="margin-top: 5px;">*：若抽奖但是没有中奖，则将积累幸运值提升下次抽奖的中奖概率，幸运值将会在下次中奖后重置</p>
         <h2 style="margin-top: 10px">兑奖规则：</h2>
         <p style="margin-bottom: 5px">
@@ -251,9 +258,15 @@
         <h2>Rules：</h2>
         <p>1、Install Xplorer and get 1 lucky draw chance</p>
         <p>
-          2、Every 4 students you invite to install and register Xplorer will get 1 lucky draw chance (Maximum 3 lucky draw chances)
+          2、Arrive at the event booth to get 1 lucky draw chance (Maximum 1 lucky draw chance)
         </p>
-        <p>3、Participate in Canteen Vote to get 1 lucky draw chance (Maximum 1 lucky draw chance)</p>
+        <p>
+          3、Leave suggestions in the message area of the event booth and get 1 lucky draw chance (Maximum 1 lucky draw chance)
+        </p>
+        <p>
+          4、Every 4 students you invite to install and register Xplorer will get 1 lucky draw chance (Maximum 3 lucky draw chances)
+        </p>
+        <p>5、Participate in Canteen Vote to get 1 lucky draw chance (Maximum 1 lucky draw chance)</p>
         <p style="margin-top: 5px;">
           *：If you draw but do not win, the Lucky Level will be accumulated to increase the probability of winning the next draw. The Lucky Level will be reset after the next winning.
         </p>
