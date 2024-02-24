@@ -70,7 +70,6 @@
           ></canvas>
           <img class="pointer" src="static/picture/turnplate-pointer.png" />
         </div>
-        <mdui-icon name='info' style="font-size: 26px; color: rgb(104, 15, 219);" onclick="switchProbabilityTable()"> </mdui-icon>
         <!--抽奖次数&幸运值-->
         <mdui-list
           style="
@@ -104,15 +103,15 @@
         <!--查看详细抽奖规则&中奖概率&中奖查询-->
         <div style="justify-content: center">
           <mdui-button
-            style="margin-top: 5%; left: 10%; width: 100px;"
+            style="margin-top: 5%; left: 5%; width: 130px;"
             onclick="switchRuleDetail()"
             >
-            <p class="zh">抽奖规则</p>
-            <p class="en">Rules</p>
+            <p class="zh">📜抽奖规则</p>
+            <p class="en">📜Rules</p>
           </mdui-button>
-          <mdui-button onclick="getLotteryResult()" style="margin-top: 5%; left: 17%; width: 100px;">
-            <p class="zh">中奖查询</p>
-            <p class="en">Result Query</p>
+          <mdui-button onclick="getLotteryResult()" style="margin-top: 5%; left: 11%; width: 130px;">
+            <p class="zh">🔍中奖查询</p>
+            <p class="en">🔍Result Query</p>
           </mdui-button>
         </div>
 
@@ -267,7 +266,11 @@
           Note: This event has nothing to do with Apple Inc.
         </p>
       </div>
-      <mdui-button onclick="switchRuleDetail()" style="margin-top: 10px; left: 65%; height: 35px">
+      <mdui-button onclick="switchProbabilityTable()" style="margin-top: 10px; width: 150px; height: 35px">
+        <p class="zh">📃中奖概率表</p>
+        <p class="en">📃Probability Table</p>
+      </mdui-button>
+      <mdui-button onclick="switchRuleDetail()" style="margin-top: 10px; left: 10%; height: 35px">
         <p class="zh">💡懂啦 !</p>
         <p class="en">💡Get it !</p>
       </mdui-button>
@@ -399,9 +402,9 @@
       // =====================网页初始化=====================
       // 拦截非法访问，获取token和language
       const url = new URL(window.location.href);
-      // if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
-      //   window.location.href = "https://www.mocd.cc/";
-      // }
+      if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
+        window.location.href = "https://www.mocd.cc/";
+      }
       const token = url.searchParams.get("token");
       var lang = url.searchParams.get("lang");
 
@@ -478,9 +481,12 @@
         document.getElementById("myQRCode").style.display = "none";
       }
 
-      // Rule3&4获取机会二维码弹窗
+      // Rule3&4获取机会show Token二维码弹窗
       function showTokenCode() {
         let tokenCodePopup = document.getElementById("myTokenQR");
+        if (tokenCodePopup.style.display == "grid") {
+          return;
+        }
         $('#tokenCode').qrcode(token);
         tokenCodePopup.style.display = "grid";
       }
@@ -645,8 +651,8 @@
             };
             // 创建列表内容-名称
             let resultName = document.createElement("span");
-            resultName.style.fontSize = "14px";
-            resultName.style.fontWeight = "normal";
+            resultName.style.fontSize = "15px";
+            resultName.style.fontWeight = "bold";
             resultName.textContent = element.prizeName;
             // 创建列表内容-时间
             let resultTime = document.createElement("span");
@@ -755,8 +761,8 @@
           $("#wheelcanvas").stopRotate();
           $("#wheelcanvas").rotate({
             angle: 0,
-            animateTo:  angles + 3600, //旋转角度
-            duration: 6000, //旋转动画时间
+            animateTo:  angles + 4320, //旋转角度
+            duration: 4000, //旋转动画时间
             callback: function () {
               //中奖提示
               if (lang.includes('zh')) {
