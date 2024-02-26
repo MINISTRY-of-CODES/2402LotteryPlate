@@ -295,7 +295,20 @@
         <p class="zh">📃中奖概率表</p>
         <p class="en">📃Probability Table</p>
       </mdui-button>
-      <mdui-button onclick="switchRuleDetail()" style="margin-top: 10px; left: 10%; height: 35px">
+      <mdui-button onclick="switchDiscountPlan()" style="margin-top: 10px; left: 6%; height: 35px">
+        <p class="zh">📉优惠方案</p>
+        <p class="en">📉Discount</p>
+      </mdui-button>
+      <mdui-button onclick="switchRuleDetail()" style="margin-top: 10px; left: 28%; height: 35px">
+        <p class="zh">💡懂啦 !</p>
+        <p class="en">💡Get it !</p>
+      </mdui-button>
+    </div>
+
+    <!--优惠方案弹窗-->
+    <div id="myDiscountPlan" class="discountPlan">
+      <img src="https://i.miji.bid/2024/02/26/320a02e0e424267f88b3ecb63aa702b7.png" alt="discountPlan" style="height: 80vh; width: 90vw;">
+      <mdui-button onclick="switchDiscountPlan()" style="margin-top: 10px; left: 34%; height: 35px">
         <p class="zh">💡懂啦 !</p>
         <p class="en">💡Get it !</p>
       </mdui-button>
@@ -444,9 +457,9 @@
       // =====================网页初始化=====================
       // 拦截非法访问，获取token和language
       const url = new URL(window.location.href);
-      // if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
-      //   window.location.href = "https://www.mocd.cc/";
-      // }
+      if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
+        window.location.href = "https://www.mocd.cc/";
+      }
       const token = url.searchParams.get("token");
       var lang = url.searchParams.get("lang");
 
@@ -490,6 +503,14 @@
           document.getElementById("myRuleDetail").style.display = "none";
         } else {
           document.getElementById("myRuleDetail").style.display = "block";
+        }
+      }
+      // 优惠方案弹窗
+      function switchDiscountPlan() {
+        if (document.getElementById("myDiscountPlan").style.display == "block") {
+          document.getElementById("myDiscountPlan").style.display = "none";
+        } else {
+          document.getElementById("myDiscountPlan").style.display = "block";
         }
       }
       // 语言选择弹窗
@@ -782,6 +803,8 @@
         }
         turnplate.restaraunts = prizeList;
         turnplate.colors = [
+          "#B9E576",
+          "#52B5B5",
           "#B9E576",
           "#52B5B5",
           "#B9E576",
