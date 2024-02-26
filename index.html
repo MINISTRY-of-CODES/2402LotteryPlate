@@ -251,7 +251,7 @@
         <p style="margin-bottom: 5px">
           消耗抽奖次数进行抽奖后，若中奖，则会产生中奖记录。
         </p>
-        <p>用户前往活动摊位凭中奖记录二维码兑换相应奖品。</p>
+        <p>用户前往活动摊位凭中奖记录二维码兑换实物奖品，优惠券等虚拟奖品将自动发放至卡包。</p>
         <h2 style="margin-top: 10px">摊位在哪？</h2>
         <p>2月26日 13:30 - 15:30 @B1</p>
         <p>2月27日 16:30 - 19:30 @D6</p>
@@ -280,7 +280,7 @@
         <p style="margin-bottom: 5px">
           After consuming the chances of lottery draws, if you win, a winning record will be generated.
         </p>
-        <p>Users go to the event booth to redeem corresponding prizes based on the QR codes of winning records.</p>
+        <p>Users go to the event booth to redeem corresponding prizes based on the QR codes of winning records. Virtual prizes such as coupons will be automatically distributed to card packs.</p>
         <h2 style="margin-top: 10px">Where is the booth?</h2>
         <p>Feb. 26th 13:30 - 15:30 @B1</p>
         <p>Feb. 27th 16:30 - 19:30 @D6</p>
@@ -457,9 +457,9 @@
       // =====================网页初始化=====================
       // 拦截非法访问，获取token和language
       const url = new URL(window.location.href);
-      if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
-        window.location.href = "https://www.mocd.cc/";
-      }
+      // if (!(url.href.includes("token") && url.href.includes("lang"))) { // 非法访问则重定向至官网
+      //   window.location.href = "https://www.mocd.cc/";
+      // }
       const token = url.searchParams.get("token");
       var lang = url.searchParams.get("lang");
 
